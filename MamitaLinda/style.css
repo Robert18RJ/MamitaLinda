@@ -1,0 +1,594 @@
+/* Estilos básicos */
+body {
+    font-family: 'Marck Script', cursive, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #ffcdd2, #f8bbd0, #e1bee7);
+    color: #333;
+    overflow-x: hidden;
+}
+
+h1 {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 3rem;
+    margin-bottom: 110px;
+    color: #d81b60;
+}
+
+/* Contenedor principal - Ajustado para envolver el nuevo tamaño del sobre */
+.contenedor {
+    position: relative;
+    width: 450px; /* ¡Nuevo ancho! */
+    max-width: 95%; /* Asegura que sea responsive y no se salga en pantallas pequeñas */
+    height: 300px; /* ¡Nueva altura! */
+     /* Quitamos perspective y margin-bottom de aquí, ya están en envoltura-sobre o body */
+    display: flex; /* Mantenemos flex para centrar el sobre si es necesario */
+    justify-content: center;
+    align-items: center;
+    /* Puedes añadir un margen si quieres separarlo del título, por ejemplo: */
+    margin-top: 40px;
+    margin-bottom: 100px;
+}
+
+/* Sobre y Envoltura - Nuevas dimensiones */
+.envoltura-sobre {
+    position: relative;
+    width: 100%; /* Ocupa el 100% del .contenedor */
+    height: 100%; /* Ocupa el 100% del .contenedor */
+    cursor: pointer;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+}
+
+.sobre {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #ff86b3;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transform-style: preserve-3d;
+}
+
+/* Corazón del sobre - Nuevo tamaño y centrado */
+.corazon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg); /* Usamos translate para un mejor centrado */
+    width: 60px; /* ¡Nuevo tamaño! */
+    height: 60px; /* ¡Nuevo tamaño! */
+    z-index: 2; /* Asegura que esté sobre las solapas cerradas */
+    background-color: #ff2a6d;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.corazon:before, .corazon:after {
+    content: '';
+    position: absolute;
+    width: 60px; /* Se ajusta al tamaño del corazón */
+    height: 60px;
+    background-color: #ff2a6d;
+    border-radius: 50%;
+}
+
+.corazon:before {
+    top: 0;
+    left: -30px; /* La mitad del nuevo tamaño (-60px / 2) */
+}
+
+.corazon:after {
+    top: -30px; /* La mitad del nuevo tamaño (-60px / 2) */
+    left: 0;
+}
+
+/* Solapas del sobre - Nuevas dimensiones de los bordes */
+.solapa-superior {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    top: 0;
+    border-left: 225px solid transparent; /* ¡Nuevo ancho de borde! (450/2) */
+    border-right: 225px solid transparent; /* ¡Nuevo ancho de borde! */
+    border-top: 150px solid #ff9bbf; /* ¡Nueva altura de borde! (300/2) */
+    box-sizing: border-box;
+    transform-origin: top;
+    transition: transform 0.5s ease 0.2s;
+    z-index: 1;
+}
+
+.solapa-inferior {
+    position: absolute;
+    width: 100%;
+    height: 0;
+    bottom: 0;
+    border-left: 225px solid transparent; /* ¡Nuevo ancho de borde! */
+    border-right: 225px solid transparent; /* ¡Nuevo ancho de borde! */
+    border-bottom: 150px solid #ffb3ce; /* ¡Nueva altura de borde! */
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.solapa-izquierda {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    left: 0;
+    border-left: 225px solid #ffcce0; /* ¡Nuevo ancho de borde! */
+    border-top: 150px solid transparent; /* ¡Nueva altura de borde! */
+    border-bottom: 150px solid transparent; /* ¡Nueva altura de borde! */
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+.solapa-derecha {
+    position: absolute;
+    width: 0;
+    height: 100%;
+    right: 0;
+    border-right: 225px solid #ffcce0; /* ¡Nuevo ancho de borde! */
+    border-top: 150px solid transparent; /* ¡Nueva altura de borde! */
+    border-bottom: 150px solid transparent; /* ¡Nueva altura de borde! */
+    box-sizing: border-box;
+    z-index: 1;
+}
+
+/* Animación de apertura del sobre - Sin cambios aquí, usan las propiedades existentes */
+.envoltura-sobre.abierto .solapa-superior {
+    transform: rotateX(180deg);
+    z-index: 0;
+}
+
+/* Las solapas laterales en el diseño anterior no tenían rotación al abrir.
+Si quieres que roten, añade:
+.envoltura-sobre.abierto .solapa-izquierda {
+    transform: rotateY(30deg); // O el ángulo que prefieras
+}
+.envoltura-sobre.abierto .solapa-derecha {
+    transform: rotateY(-30deg); // O el ángulo que prefieras
+}
+*/
+
+.envoltura-sobre.abierto .corazon {
+    transform: rotate(45deg) scale(0);
+    opacity: 0;
+}
+
+/* Carta - Ajuste automático por ser relativo al sobre, solo confirmamos estilos internos */
+.carta {
+    position: absolute;
+    top: 0px; /* Mantienes tu padding interno del sobre */
+    left: 10px;
+    width: calc(100% - 20px); /* Se ajustará al 100% del nuevo sobre (450px) menos 20px */
+    height: calc(100% - 20px); /* Se ajustará al 100% del nuevo sobre (300px) menos 20px */
+    background-color: #fff;
+    border-radius: 3px;
+    z-index: 0;
+    transform: translateY(15px); /* Posición inicial dentro del sobre */
+    transition: all 0.5s ease 0.3s;
+    padding: 20px; /* Mantenemos tu padding interno de la carta */
+    box-sizing: border-box;
+    overflow: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.carta.carta-afuera {
+    transform: translateY(-120px); /* Ajustamos la distancia de salida (ej: 100px * 1.2) */
+    z-index: 10;
+}
+
+.contenido {
+    padding: 10px;
+    font-size: 1.3rem; /* Puedes ajustar este tamaño si quieres que el texto sea más grande en la carta más grande */
+    color: #333;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+#textoCarta {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    text-align: justify;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    font-size: 1em; /* El tamaño base del texto se heredará de .contenido, puedes ajustar aquí si quieres */
+}
+
+/* Botón de control de música - Sin cambios */
+#controlMusica {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    z-index: 100;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+#controlMusica:hover {
+    background-color: #c2185b;
+    transform: scale(1.05);
+}
+
+/* Botón para abrir galería - Sin cambios */
+#abrirGaleria {
+    display: none;
+    margin: 20px auto;
+    background-color: #a42b2b;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+}
+
+#abrirGaleria:hover {
+    background-color: #490c0b;
+    transform: scale(1.05);
+}
+
+/* Modal de galería - Sin cambios mayores, se ajustará por max-width/height */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 80%; /* Mantenemos responsive */
+    max-height: 80%; /* Mantenemos responsive */
+    position: relative;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.foto-galeria {
+    display: none;
+    max-width: 100%; /* Se ajustará al modal */
+    max-height: 60vh; /* Se ajustará a la ventana */
+    margin: 0 auto;
+    border-radius: 5px;
+}
+
+.foto-galeria.activa {
+    display: block;
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #333;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 1010;
+}
+
+.cerrar-modal:hover {
+    color: #e91e63;
+    transform: scale(1.2);
+}
+
+.navegacion-fotos {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navegacion-fotos button {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    margin: 0 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.navegacion-fotos button:hover {
+    background-color: #c2185b;
+}
+
+#indicadorFoto {
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+/* Mensajes al pasar el ratón - Sin cambios */
+.mensaje-hover {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    color: #e91e63;
+    font-weight: bold;
+    padding: 2px 5px;
+    border-bottom: 2px dotted #e91e63;
+    margin: 5px 0;
+}
+
+.mensaje-hover::after {
+    content: attr(data-mensaje-extra);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #995469;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    width: max-content;
+    max-width: 200px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.mensaje-hover:hover::after {
+    opacity: 1;
+    visibility: visible;
+    bottom: 125%;
+}
+
+/* Confeti - Sin cambios en la animación, solo en cómo se genera con JS si usas el tamaño del sobre */
+.confeti-contenedor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 50;
+    overflow: hidden;
+}
+
+.confeti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #f06292;
+    animation: caidaConfeti 5s ease-in-out forwards;
+}
+
+@keyframes caidaConfeti {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(calc(100vh + 100px)) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Responsive - Ajustado para el nuevo tamaño del sobre y hacerlo fluido */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    /* Ajustamos el contenedor y el sobre para que sean fluidos */
+    .contenedor,
+    .envoltura-sobre {
+        width: 90vw; /* Ancho del sobre basado en el viewport */
+        height: 60vw; /* Altura calculada para mantener la proporción 450/300 = 1.5 -> 90vw / 1.5 = 60vw */
+         /* Asegúrate de que max-width en .contenedor es al menos 90vw si la pantalla es más grande que 768px pero menor que 450px */
+        max-width: 90vw; /* Limitamos el ancho máximo en móviles */
+        /* Quitamos la altura fija de 300px en el contenedor si usamos vw */
+        height: auto; /* Permitimos que la altura se ajuste por las solapas */
+        margin-bottom: 50px;
+    }
+
+     .sobre {
+         width: 100%; /* Ocupa el 100% del 90vw */
+         height: 100%; /* Ocupa el 100% del 60vw */
+         /* Asegúrate de que el background-color en .solapa-inferior no interfiera si usas un background en .sobre */
+     }
+
+    /* Ajustes para las solapas en responsive (usando vw para ser fluidos) */
+    .solapa-superior {
+        border-left-width: 45vw; /* La mitad del 90vw */
+        border-right-width: 45vw;
+        border-top-width: 30vw; /* La mitad del 60vw */
+    }
+
+    .solapa-inferior {
+        border-left-width: 45vw;
+        border-right-width: 45vw;
+        border-bottom-width: 30vw; /* La mitad del 60vw */
+    }
+
+    .solapa-izquierda {
+        border-left-width: 45vw;
+        border-top-width: 30vw; /* La mitad del 60vw */
+        border-bottom-width: 30vw;
+    }
+
+    .solapa-derecha {
+        border-right-width: 45vw;
+        border-top-width: 30vw; /* La mitad del 60vw */
+        border-bottom-width: 30vw;
+    }
+
+     /* Ajuste del corazón en responsive */
+     .corazon {
+         width: 40px; /* Tamaño fijo más pequeño en móviles */
+         height: 40px;
+         margin-top: -20px;
+         margin-left: -20px;
+     }
+     .corazon:before, .corazon:after {
+         width: 40px;
+         height: 40px;
+     }
+     .corazon:before { left: -20px; }
+     .corazon:after { top: -20px; left: 0; }
+
+
+    .contenido {
+        font-size: 1.1rem;
+    }
+
+     .carta.carta-afuera {
+         /* Ajusta la distancia de salida en responsive si es necesario */
+         transform: translateY(-80px); /* Ejemplo */
+     }
+
+    .modal-contenido {
+        max-width: 95%;
+        padding: 15px;
+    }
+
+    .foto-galeria {
+        max-height: 50vh;
+    }
+
+     .mensaje-hover::after {
+         font-size: 14px; /* Tamaño de fuente más pequeño para tooltips */
+         padding: 3px 8px;
+         bottom: 10%; /* Ajuste la distancia del tooltip */
+     }
+     .mensaje-hover:hover::after {
+         bottom: 115%; /* Ajuste la distancia del tooltip en hover */
+     }
+    /* Media Queries para Responsividad */
+
+/* Teléfonos pequeños (hasta 480px) */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 80px;
+    }
+
+    .contenedor {
+        width: 95%;
+        height: auto;
+        margin-bottom: 60px;
+    }
+
+    .envoltura-sobre {
+        height: 250px;
+    }
+
+    .corazon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .corazon:before,
+    .corazon:after {
+        width: 40px;
+        height: 40px;
+    }
+
+    .solapa-superior {
+        border-left: 50% solid transparent;
+        border-right: 50% solid transparent;
+        border-top: 125px solid #ff9bbf;
+    }
+
+    .solapa-inferior {
+        border-left: 50% solid transparent;
+        border-right: 50% solid transparent;
+        border-bottom: 125px solid #ffb3ce;
+    }
+
+    .solapa-izquierda,
+    .solapa-derecha {
+        border-top: 125px solid transparent;
+        border-bottom: 125px solid transparent;
+        border-left: 50% solid #ffcce0;
+        border-right: 50% solid #ffcce0;
+    }
+
+    .carta {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+    .contenido {
+        font-size: 1rem;
+    }
+}
+
+/* Tablets (481px a 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .contenedor {
+        width: 90%;
+        height: 280px;
+    }
+
+    .corazon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .corazon:before,
+    .corazon:after {
+        width: 50px;
+        height: 50px;
+    }
+
+    .carta {
+        padding: 15px;
+    }
+}
+
+/* Pantallas grandes (más de 768px) ya están bien con tus valores base */
+
+@media (max-width: 600px) {
+  .heart {
+    top: -15px;
+    width: 40px; /* ajusta según sea necesario */
+    height: 40px;
+  }
+}
+
+/* Ajuste solo para pantallas pequeñas (móviles) */
+@media (max-width: 768px) {
+    .corazon {
+        transform: translate(-10%, -10%) rotate(45deg);
+    }
+}
+
+}
